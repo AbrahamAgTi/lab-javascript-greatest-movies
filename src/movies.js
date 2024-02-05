@@ -7,6 +7,7 @@ function getAllDirectors(moviesArray) {
 
 // Iteration 2: Steven Spielberg. The best? - How many drama movies did STEVEN SPIELBERG direct?
 function howManyMovies(moviesArray) {
+    
     const stevenMovies = moviesArray.filter(
         (movie) => movie.director == "Steven Spielberg"
       );
@@ -16,6 +17,7 @@ function howManyMovies(moviesArray) {
 
 // Iteration 3: All scores average - Get the average of all scores with 2 decimals
 function scoresAverage(moviesArray) {
+    
     if (moviesArray.length == 0)  {
         return 0
     } 
@@ -34,6 +36,7 @@ function scoresAverage(moviesArray) {
 
 // Iteration 4: Drama movies - Get the average of Drama Movies
 function dramaMoviesScore(moviesArray) {
+    
     const listfiltered = moviesArray.filter(element => element.genre.includes("Drama"))
 
     if (listfiltered.length == 0) {
@@ -50,6 +53,7 @@ function dramaMoviesScore(moviesArray) {
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
 function orderByYear(moviesArray) {
+    
     const sortedByYearArray = [...moviesArray] 
     sortedByYearArray.sort((a, b) =>  
        a.year - b.year) 
@@ -58,10 +62,63 @@ function orderByYear(moviesArray) {
 }
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
-function orderAlphabetically(moviesArray) {}
+function orderAlphabetically(moviesArray) {
+
+    const titleArray = [];
+    
+    for (let i=0; i < moviesArray.length; i++){
+        titleArray.push(moviesArray[i].title)
+    }
+    const sortedAlpha = titleArray.sort();
+    if (sortedAlpha.length > 20){
+        return sortedAlpha.slice(0,20)
+    }
+    else {
+        return sortedAlpha
+   }
+ 
+
+}
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(moviesArray) {}
 
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
-function bestYearAvg(moviesArray) {}
+function bestYearAvg(moviesArray) {
+    
+        
+    // Get an array of all arrays by year (an array for 1971, an array for 1973, etc...)
+    const years = []
+
+    // get an array of only years
+    moviesArray.forEach(movie => {
+
+        if (!years.includes(movie.year)) {
+            years.push(movie.year)
+        }
+
+    })
+
+    // change the array of [ year ] to an array of [{ year, score }]
+    const moviesData = years.map(year => {
+
+        // get an array of movies for each specific year
+        const moviesFromYear = moviesArray.filter(movie => movie.year === year)
+
+        return {
+            year,
+            score: scoresAverage(moviesFromYear),
+        }
+
+    })
+
+    // Sort by score to get the highest year score
+    moviesData.sort((a, b) => {
+        return a.averageScore - b.averageScore
+    })
+
+    // Extract year and score from the movie with highest score
+    const { year, score } = moviesData[moviesData.length - 1]
+
+    return `The best year was ${year} with an average score of ${score}`
+}
